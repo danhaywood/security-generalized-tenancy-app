@@ -27,7 +27,6 @@ import org.isisaddons.module.security.dom.user.ApplicationUser;
 
 import java.util.Objects;
 import java.util.Optional;
-import java.util.SortedSet;
 
 @DomainService(nature = NatureOfService.DOMAIN)
 public class ApplicationTenancyEvaluatorForConcerts implements ApplicationTenancyEvaluator {
@@ -43,12 +42,14 @@ public class ApplicationTenancyEvaluatorForConcerts implements ApplicationTenanc
             return null;
         }
         final Concert concert = (Concert) domainObject;
-        final String concertName = concert.getName();
 
-        final SortedSet<ApplicationRole> roles = applicationUser.getRoles();
-        final Optional<ApplicationRole> any = roles.stream().filter(x -> Objects.equals(x.getName(), concertName)).findAny();
+        final Optional<ApplicationRole> roleIfAny =
+                applicationUser.getRoles()
+                        .stream()
+                        .filter(role -> Objects.equals(role.getName(), concert.getName()))
+                        .findAny();
 
-        return any.isPresent()? null: "Requires role " + concertName;
+        return roleIfAny.isPresent()? null: "Requires role " + concert.getName();
     }
 
     @Override

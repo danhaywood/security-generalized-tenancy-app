@@ -1,0 +1,111 @@
+= isis-module-security
+
+image:https://travis-ci.org/danhaywood/security-generalized-tenancy-app.png?branch=master[Build Status,link=https://travis-ci.org/danhaywood/security-generalized-tenancy-app]
+
+This link:http://isis.apache.org[Apache Isis] application demonstrates how to use the `ApplicationTenancyEvaluator` SPI
+service from the (non-ASF) http://github.com/isisaddons/isis-module-security[Isis addons' security] module, allowing
+a given user to have access to multiple disjoint sets of objects.
+
+
+== Domain model
+
+The domain model is one of `Concert` objects, where each such concert has a corresponding committee to organize said
+concert.  The members of the committee can be added and removed at runtime or defined when creating a new `Concert`
+object.
+
+A user can be assigned to be a member of multiple committees, and can only the members of a concert's organization
+committee should be able to view/modify the `Concert`.
+
+[NOTE]
+====
+This example was motivated by
+link:https://lists.apache.org/thread.html/6350239823b8098e9cfaf4cb5273c8a7f3bae62cf1eef7b5e59b8f25@%3Cusers.isis.apache.org%3E[this question]
+on the Apache Isis mailing list.
+====
+
+
+This demo app models the concept of an committee of a `Concert` as a security role, and the security role and the
+`Concert` are linked simply by the name of each.  Thus, having the "easter2017" security role granted means
+that the user can view/edit the corresponding `Concert` object named "easter2017".
+
+
+== Screenshots
+
+Logged in as bill:
+
+image::https://raw.github.com/danhaywood/security-generalized-tenancy-app/master/images/bill.png[link="https://raw.github.com/danhaywood/security-generalized-tenancy-app/master/images/bill.png"]
+
+
+Logged in as joe:
+
+image::https://raw.github.com/danhaywood/security-generalized-tenancy-app/master/images/joe.png[link="https://raw.github.com/danhaywood/security-generalized-tenancy-app/master/images/joe.png"]
+
+
+
+== Implementation
+
+The implementation relies on this implementation of `ApplicationTenancyEvaluator`:
+
+[source,java]
+----
+@DomainService(nature = NatureOfService.DOMAIN)
+public class ApplicationTenancyEvaluatorForConcerts implements ApplicationTenancyEvaluator {
+    public boolean handles(Class<?> cls) {
+        return Concert.class.isAssignableFrom(cls);
+    }
+    public String hides(Object domainObject, ApplicationUser applicationUser) {
+        if (!(domainObject instanceof Concert)) {
+            return null;
+        }
+        final Concert concert = (Concert) domainObject;
+
+        final Optional<ApplicationRole> roleIfAny =
+                applicationUser.getRoles()
+                        .stream()
+                        .filter(role -> Objects.equals(role.getName(), concert.getName()))  // <1>
+                        .findAny();
+
+        return roleIfAny.isPresent()? null: "Requires role " + concert.getName();
+    }
+    public String disables(Object domainObject, ApplicationUser applicationUser) {
+        return null;
+    }
+}
+----
+<1> this is the important line, correlating the name of the `ApplicationRole` with the name of the `Concert`
+
+
+
+== How to run the Demo App
+
+The prerequisite software is:
+
+* Java JDK 8 (&gt;= 1.9.0) or Java JDK 7 (&lt;= 1.8.0)
+** note that the compile source and target remains at JDK 7
+* http://maven.apache.org[maven 3] (3.2.x is recommended).
+
+To build the demo app:
+
+[source,bash]
+----
+git clone https://github.com/danhaywood/security-generalized-tenancy-app.git .
+mvn clean install
+----
+
+To run the demo app:
+
+[source,bash]
+----
+cd webapp
+mvn jetty:run
+----
+
+
+You can log in with:
+
+* `bill` / `pass` - has access to the "easter2017" and "christmas2017" ``Concert``s
+* `joe` / `pass` - has access to the "easter2017" and "summer2017" ``Concert``s
+* `isis-module-security-admin` / `pass` - security administrator, can be used to grant/revoke roles
+
+
+

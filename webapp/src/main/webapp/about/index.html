@@ -57,13 +57,10 @@ th, td {
             <img alt="Isis Logo" src="about/images/isis-logo.png" />
              
             <p>
-                This app has been generated using Apache Isis'
-                <a href="http://isis.apache.org/intro/getting-started/simple%61pp-archetype.html" target="_blank">SimpleApp</a> archetype,
-                to create a purposefully minimal application that nevertheless includes fixture data, integration tests and BDD specs.
-                <br/>
-                <br/>
-                The app itself consists of a single domain class, <a href="https://github.com/apache/isis/blob/master/example/application/simple%61pp/dom/src/main/java/dom/simple/SimpleObject.java"  target="_blank"><tt>SimpleObject</tt></a>,
-                along with an equally simple (factory/repository) domain service, <a href="https://github.com/apache/isis/blob/master/example/application/simple%61pp/dom/src/main/java/dom/simple/SimpleObjects.java"  target="_blank"><tt>SimpleObjects</tt></a>.
+                This <a href="http://isis.apache.org">Apache Isis</a> application demonstrates how to use the
+                `ApplicationTenancyEvaluator` SPI service from the <a href="http://github.com/isisaddons/isis-module-security">Isis addons' security</a> module,
+                allowing a given user to have access to multiple disjoint sets of objects.
+
             </p>
 
             <p>To access the app:</p>
@@ -101,8 +98,12 @@ th, td {
             </ul>
 
             <p>
-            The default user/password is <b><i>sven/pass</i></b> (as configured in the
-            <a href="https://github.com/apache/isis/blob/master/example/application/simple%61pp/webapp/src/main/webapp/WEB-INF/shiro.ini" target="_blank">shiro.ini</a> file).
+            Valid users are:
+            <ul>
+                <li>bill/pass</li> - access to two objects
+                <li>joe/pass</li> - access to two objects (not same)
+                <li>isis-module-security-admin/pass</li> (security admin, no domain object access)
+            </ul>
             </p>
             
         </div>

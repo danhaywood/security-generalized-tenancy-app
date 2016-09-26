@@ -18,16 +18,13 @@
  */
 package domainapp.app;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
+import domainapp.fixture.scenarios.DemoFixture;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 
-import domainapp.fixture.scenarios.RecreateSimpleObjects;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Run the app but without setting up any fixtures.
@@ -39,7 +36,7 @@ public class DomainAppAppManifestWithFixtures extends DomainAppAppManifest {
      */
     @Override
     public List<Class<? extends FixtureScript>> getFixtures() {
-        return Lists.newArrayList(RecreateSimpleObjects.class);
+        return Lists.newArrayList(DemoFixture.class);
     }
 
     /**
@@ -47,7 +44,8 @@ public class DomainAppAppManifestWithFixtures extends DomainAppAppManifest {
      */
     @Override
     public Map<String, String> getConfigurationProperties() {
-        HashMap<String,String> props = Maps.newHashMap();
+
+        Map<String,String> props = Maps.newHashMap(super.getConfigurationProperties());
         props.put("isis.persistor.datanucleus.install-fixtures","true");
         return props;
     }

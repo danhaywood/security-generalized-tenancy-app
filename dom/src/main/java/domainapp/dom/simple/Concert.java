@@ -18,18 +18,7 @@
  */
 package domainapp.dom.simple;
 
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.VersionStrategy;
-
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.Auditing;
-import org.apache.isis.applib.annotation.CommandReification;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.Publishing;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.applib.services.i18n.TranslatableString;
@@ -38,9 +27,12 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.util.ObjectContracts;
 
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.VersionStrategy;
+
 @javax.jdo.annotations.PersistenceCapable(
         identityType=IdentityType.DATASTORE,
-        schema = "simple"
+        schema = "concert"
 )
 @javax.jdo.annotations.DatastoreIdentity(
         strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY,
@@ -52,15 +44,15 @@ import org.apache.isis.applib.util.ObjectContracts;
         @javax.jdo.annotations.Query(
                 name = "findByName", language = "JDOQL",
                 value = "SELECT "
-                        + "FROM domainapp.dom.simple.SimpleObject "
+                        + "FROM domainapp.dom.simple.Concert "
                         + "WHERE name.indexOf(:name) >= 0 ")
 })
-@javax.jdo.annotations.Unique(name="SimpleObject_name_UNQ", members = {"name"})
+@javax.jdo.annotations.Unique(name="Concert_name_UNQ", members = {"name"})
 @DomainObject(
         publishing = Publishing.ENABLED,
         auditing = Auditing.ENABLED
 )
-public class SimpleObject implements Comparable<SimpleObject> {
+public class Concert implements Comparable<Concert> {
 
     //region > title
     public TranslatableString title() {
@@ -69,7 +61,7 @@ public class SimpleObject implements Comparable<SimpleObject> {
     //endregion
 
     //region > constructor
-    public SimpleObject(final String name) {
+    public Concert(final String name) {
         setName(name);
     }
     //endregion
@@ -91,14 +83,14 @@ public class SimpleObject implements Comparable<SimpleObject> {
     //endregion
 
     //region > updateName (action)
-    public static class UpdateNameDomainEvent extends ActionDomainEvent<SimpleObject> {}
+    public static class UpdateNameDomainEvent extends ActionDomainEvent<Concert> {}
     @Action(
             command = CommandReification.ENABLED,
             publishing = Publishing.ENABLED,
             semantics = SemanticsOf.IDEMPOTENT,
             domainEvent = UpdateNameDomainEvent.class
     )
-    public SimpleObject updateName(@ParameterLayout(named="Name") final String name) {
+    public Concert updateName(@ParameterLayout(named="Name") final String name) {
         setName(name);
         return this;
     }
@@ -114,7 +106,7 @@ public class SimpleObject implements Comparable<SimpleObject> {
     //region > notes (editable property)
     public static final int NOTES_LENGTH = 4000;
 
-    public static class NotesDomainEvent extends PropertyDomainEvent<SimpleObject,String> {}
+    public static class NotesDomainEvent extends PropertyDomainEvent<Concert,String> {}
     @javax.jdo.annotations.Column(
             allowsNull="true",
             length = NOTES_LENGTH
@@ -134,7 +126,7 @@ public class SimpleObject implements Comparable<SimpleObject> {
     //endregion
 
     //region > delete (action)
-    public static class DeleteDomainEvent extends ActionDomainEvent<SimpleObject> {}
+    public static class DeleteDomainEvent extends ActionDomainEvent<Concert> {}
     @Action(
             domainEvent = DeleteDomainEvent.class,
             semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE
@@ -153,7 +145,7 @@ public class SimpleObject implements Comparable<SimpleObject> {
         return ObjectContracts.toString(this, "name");
     }
     @Override
-    public int compareTo(final SimpleObject other) {
+    public int compareTo(final Concert other) {
         return ObjectContracts.compare(this, other, "name");
     }
 

@@ -18,60 +18,52 @@
  */
 package domainapp.dom.simple;
 
-import java.util.List;
-
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
+
+import java.util.List;
 
 @DomainService(
         nature = NatureOfService.VIEW_MENU_ONLY,
-        repositoryFor = SimpleObject.class
+        repositoryFor = Concert.class
 )
 @DomainServiceLayout(
-        named = "Simple Objects",
+        named = "Concerts",
         menuOrder = "10"
 )
-public class SimpleObjectMenu {
+public class ConcertMenu {
 
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT)
     @MemberOrder(sequence = "1")
-    public List<SimpleObject> listAll() {
-        return simpleObjectRepository.listAll();
+    public List<Concert> listAll() {
+        return concertRepository.listAll();
     }
 
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT)
     @MemberOrder(sequence = "2")
-    public List<SimpleObject> findByName(
+    public List<Concert> findByName(
             @ParameterLayout(named="Name")
             final String name
     ) {
-        return simpleObjectRepository.findByName(name);
+        return concertRepository.findByName(name);
     }
 
 
-    public static class CreateDomainEvent extends ActionDomainEvent<SimpleObjectMenu> {}
+    public static class CreateDomainEvent extends ActionDomainEvent<ConcertMenu> {}
     @Action(domainEvent = CreateDomainEvent.class)
     @MemberOrder(sequence = "3")
-    public SimpleObject create(
+    public Concert create(
             @ParameterLayout(named="Name")
             final String name) {
-        return simpleObjectRepository.create(name);
+        return concertRepository.create(name);
     }
 
 
     @javax.inject.Inject
-    SimpleObjectRepository simpleObjectRepository;
+    ConcertRepository concertRepository;
 
 }

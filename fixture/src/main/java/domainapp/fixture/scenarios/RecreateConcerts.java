@@ -19,53 +19,35 @@
 
 package domainapp.fixture.scenarios;
 
+import com.google.common.collect.Lists;
+import domainapp.dom.simple.Concert;
+import domainapp.fixture.dom.simple.ConcertCreate;
+import domainapp.fixture.dom.simple.ConcertsTearDown;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.fixturescripts.FixtureScript;
-
-import domainapp.dom.simple.SimpleObject;
-import domainapp.fixture.dom.simple.SimpleObjectCreate;
-import domainapp.fixture.dom.simple.SimpleObjectsTearDown;
-
-public class RecreateSimpleObjects extends FixtureScript {
+public class RecreateConcerts extends FixtureScript {
 
     public final List<String> NAMES = Collections.unmodifiableList(Arrays.asList(
-            "Foo", "Bar", "Baz", "Frodo", "Froyo", "Fizz", "Bip", "Bop", "Bang", "Boo"));
+            "easter2017", "summer2017", "christmas2017"));
 
-    public RecreateSimpleObjects() {
+    public RecreateConcerts() {
         withDiscoverability(Discoverability.DISCOVERABLE);
     }
 
-    //region > number (optional input)
-    private Integer number;
-
-    /**
-     * The number of objects to create, up to 10; optional, defaults to 3.
-     */
-    public Integer getNumber() {
-        return number;
-    }
-
-    public RecreateSimpleObjects setNumber(final Integer number) {
-        this.number = number;
-        return this;
-    }
-    //endregion
-
-    //region > simpleObjects (output)
-    private final List<SimpleObject> simpleObjects = Lists.newArrayList();
+    //region > concerts (output)
+    private final List<Concert> concerts = Lists.newArrayList();
 
     /**
      * The simpleobjects created by this fixture (output).
      */
     @Programmatic
-    public List<SimpleObject> getSimpleObjects() {
-        return simpleObjects;
+    public List<Concert> getConcerts() {
+        return concerts;
     }
     //endregion
 
@@ -83,12 +65,12 @@ public class RecreateSimpleObjects extends FixtureScript {
         //
         // execute
         //
-        ec.executeChild(this, new SimpleObjectsTearDown());
+        ec.executeChild(this, new ConcertsTearDown());
 
         for (int i = 0; i < number; i++) {
-            final SimpleObjectCreate fs = new SimpleObjectCreate().setName(NAMES.get(i));
+            final ConcertCreate fs = new ConcertCreate().setName(NAMES.get(i));
             ec.executeChild(this, fs.getName(), fs);
-            simpleObjects.add(fs.getSimpleObject());
+            concerts.add(fs.getConcert());
         }
     }
 }

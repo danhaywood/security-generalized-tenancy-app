@@ -19,12 +19,12 @@
 
 package domainapp.fixture.dom.simple;
 
+import domainapp.dom.simple.Concert;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 
-import domainapp.dom.simple.SimpleObject;
-import domainapp.dom.simple.SimpleObjectMenu;
+import domainapp.dom.simple.ConcertMenu;
 
-public class SimpleObjectCreate extends FixtureScript {
+public class ConcertCreate extends FixtureScript {
 
     //region > name (input)
     private String name;
@@ -35,7 +35,7 @@ public class SimpleObjectCreate extends FixtureScript {
         return name;
     }
 
-    public SimpleObjectCreate setName(final String name) {
+    public ConcertCreate setName(final String name) {
         this.name = name;
         return this;
     }
@@ -43,14 +43,14 @@ public class SimpleObjectCreate extends FixtureScript {
 
 
     //region > simpleObject (output)
-    private SimpleObject simpleObject;
+    private Concert concert;
 
     /**
      * The created simple object (output).
      * @return
      */
-    public SimpleObject getSimpleObject() {
-        return simpleObject;
+    public Concert getConcert() {
+        return concert;
     }
     //endregion
 
@@ -59,13 +59,13 @@ public class SimpleObjectCreate extends FixtureScript {
 
         String name = checkParam("name", ec, String.class);
 
-        this.simpleObject = wrap(simpleObjectMenu).create(name);
+        this.concert = wrap(concertMenu).create(name);
 
         // also make available to UI
-        ec.addResult(this, simpleObject);
+        ec.addResult(this, concert);
     }
 
     @javax.inject.Inject
-    private SimpleObjectMenu simpleObjectMenu;
+    private ConcertMenu concertMenu;
 
 }

@@ -18,13 +18,12 @@
  */
 package domainapp.fixture;
 
+import domainapp.fixture.scenarios.DemoFixture;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsSpecification;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsSpecificationProvider;
-
-import domainapp.fixture.scenarios.RecreateSimpleObjects;
 
 /**
  * Specifies where to find fixtures, and other settings.
@@ -36,9 +35,9 @@ public class DomainAppFixtureScriptsSpecificationProvider implements FixtureScri
         return FixtureScriptsSpecification
                 .builder(DomainAppFixtureScriptsSpecificationProvider.class)
                 .with(FixtureScripts.MultipleExecutionStrategy.EXECUTE)
-                .withRunScriptDefault(RecreateSimpleObjects.class)
+                .withRunScriptDefault(DemoFixture.class)
                 .withRunScriptDropDown(FixtureScriptsSpecification.DropDownPolicy.CHOICES)
-                .withRecreate(RecreateSimpleObjects.class)
+                .withRecreate(DemoFixture.class)
                 .build();
     }
 }

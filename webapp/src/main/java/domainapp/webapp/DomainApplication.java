@@ -18,11 +18,6 @@
  */
 package domainapp.webapp;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.Charset;
-import java.util.List;
-
 import com.google.common.base.Joiner;
 import com.google.common.io.Resources;
 import com.google.inject.AbstractModule;
@@ -30,13 +25,16 @@ import com.google.inject.Module;
 import com.google.inject.name.Names;
 import com.google.inject.util.Modules;
 import com.google.inject.util.Providers;
-
-import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
-
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchTheme;
 import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvider;
+import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.util.List;
 
 /**
  * As specified in <tt>web.xml</tt>.
@@ -74,11 +72,11 @@ public class DomainApplication extends IsisWicketApplication {
         final Module overrides = new AbstractModule() {
             @Override
             protected void configure() {
-                bind(String.class).annotatedWith(Names.named("applicationName")).toInstance("Simple App");
+                bind(String.class).annotatedWith(Names.named("applicationName")).toInstance("Security Generalized Tenancy App");
                 bind(String.class).annotatedWith(Names.named("applicationCss")).toInstance("css/application.css");
                 bind(String.class).annotatedWith(Names.named("applicationJs")).toInstance("scripts/application.js");
                 bind(String.class).annotatedWith(Names.named("welcomeMessage")).toInstance(readLines(getClass(), "welcome.html"));
-                bind(String.class).annotatedWith(Names.named("aboutMessage")).toInstance("Simple App");
+                bind(String.class).annotatedWith(Names.named("aboutMessage")).toInstance("Security Generalized Tenancy App");
                 bind(InputStream.class).annotatedWith(Names.named("metaInfManifest")).toProvider(
                         Providers.of(getServletContext().getResourceAsStream("/META-INF/MANIFEST.MF")));
                 // if uncommented, then overrides isis.appManifest in config file.

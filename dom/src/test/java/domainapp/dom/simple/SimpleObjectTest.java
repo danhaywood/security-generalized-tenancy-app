@@ -23,11 +23,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SimpleObjectTest {
 
-    SimpleObject simpleObject;
+    Concert concert;
 
     @Before
     public void setUp() throws Exception {
-        simpleObject = new SimpleObject(null);
+        concert = new Concert(null);
     }
 
     public static class Name extends SimpleObjectTest {
@@ -36,13 +36,13 @@ public class SimpleObjectTest {
         public void happyCase() throws Exception {
             // given
             String name = "Foobar";
-            assertThat(simpleObject.getName()).isNull();
+            assertThat(concert.getName()).isNull();
 
             // when
-            simpleObject.setName(name);
+            concert.setName(name);
 
             // then
-            assertThat(simpleObject.getName()).isEqualTo(name);
+            assertThat(concert.getName()).isEqualTo(name);
         }
     }
 

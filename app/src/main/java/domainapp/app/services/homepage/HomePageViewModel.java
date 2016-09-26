@@ -18,13 +18,13 @@
  */
 package domainapp.app.services.homepage;
 
-import java.util.List;
-
-import org.apache.isis.applib.annotation.ViewModel;
-import org.apache.isis.applib.services.i18n.TranslatableString;
-
 import domainapp.dom.simple.Concert;
 import domainapp.dom.simple.ConcertRepository;
+import org.apache.isis.applib.annotation.ViewModel;
+import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
+
+import java.util.List;
 
 @ViewModel
 public class HomePageViewModel {
@@ -38,7 +38,7 @@ public class HomePageViewModel {
     //region > object (collection)
     @org.apache.isis.applib.annotation.HomePage
     public List<Concert> getObjects() {
-        return concertRepository.listAll();
+        return wrapperFactory.wrap(concertRepository).listAll();
     }
     //endregion
 
@@ -46,6 +46,8 @@ public class HomePageViewModel {
 
     @javax.inject.Inject
     ConcertRepository concertRepository;
+    @javax.inject.Inject
+    WrapperFactory wrapperFactory;
 
     //endregion
 }
